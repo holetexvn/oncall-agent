@@ -17,7 +17,8 @@ const STATE_DIR = path.join(__dirname, "state");
 const STATE_FILE = path.join(STATE_DIR, "issues.json");
 fs.mkdirSync(STATE_DIR, { recursive: true });
 const state = fs.existsSync(STATE_FILE) ? JSON.parse(fs.readFileSync(STATE_FILE, "utf8")) : {};
-const save = () => fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
+// mkdir mỗi lần ghi: thư mục state có thể bị xoá giữa chừng (reset-demo, git clean) trong khi tiến trình vẫn chạy
+const save = () => { fs.mkdirSync(STATE_DIR, { recursive: true }); fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2)); };
 
 const app = express();
 app.use(express.raw({ type: "*/*", limit: "1mb" }));
@@ -56,6 +57,7 @@ app.post("/webhook/sentry", (req, res) => {
   s.triggered = true; s.triggeredAt = new Date(now).toISOString(); s.triggeredAtLocal = local(now); save();
   const incident = { id, title, users: nUsers, events: nEvents, windowMin: WINDOW_MIN, firstSeen: s.firstSeen, firstSeenLocal: s.firstSeenLocal, triggeredAtLocal: s.triggeredAtLocal, ...s.sample, tags: issue?.tags || ev?.tags || [] };
   const file = path.join(STATE_DIR, `incident-${id}.json`);
+  fs.mkdirSync(STATE_DIR, { recursive: true });
   fs.writeFileSync(file, JSON.stringify(incident, null, 2));
   const child = spawn(process.execPath, [path.join(__dirname, "..", "worker", "index.js"), file], { stdio: "inherit", env: process.env, detached: true });
   child.unref();
