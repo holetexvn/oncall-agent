@@ -11,6 +11,12 @@ git checkout -q main 2>/dev/null
 git reset -q --hard HEAD          # bỏ sửa đổi của agent, KHÔNG kéo về origin/main (có thể cũ)
 git clean -qfd -e .env -e demo-app/logs 2>/dev/null
 git branch --list 'fix/incident-*' | tr -d ' ' | xargs -r -n1 git branch -qD 2>/dev/null
+echo "→ xoá nhánh fix/* còn sót TRÊN GITHUB (nếu còn, agent sẽ mất cả phút đi điều tra rồi đặt tên -v2)"
+git fetch -q --prune origin 2>/dev/null
+for b in $(git ls-remote --heads origin 'refs/heads/fix/incident-*' 2>/dev/null | awk '{print $2}' | sed 's|refs/heads/||'); do
+  git push -q origin --delete "$b" 2>/dev/null && echo "   đã xoá origin/$b"
+done
+git fetch -q --prune origin 2>/dev/null
 echo "→ đóng PR on-call còn mở (nếu có)"
 if gh auth status >/dev/null 2>&1; then
   for n in $(gh pr list --label on-call --state open --json number -q '.[].number' 2>/dev/null); do
