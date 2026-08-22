@@ -22,7 +22,9 @@ app.post("/orders", (req, res) => {
   const userId = req.get("x-user-id") || customer?.id || "anon";
   Sentry.setUser?.({ id: userId });                       // để Sentry đếm được "bao nhiêu khách bị"
   log(`POST /orders user=${userId} customer=${JSON.stringify(customer)} items=${JSON.stringify(items)}`);
-  // BUG cài sẵn: không kiểm tra items có phải mảng không
+  if (!Array.isArray(items)) {
+    return res.status(400).json({ error: "items phải là mảng" });
+  }
   const total = items.reduce((s, it) => s + it.price * it.qty, 0);
   res.json({ ok: true, customer, total });
 });
