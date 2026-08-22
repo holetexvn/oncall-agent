@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Bash",
+        "hooks": [ { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/block-dangerous.sh" } ] },
+      { "matcher": "Write|Edit",
+        "hooks": [
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/no-secrets.sh" },
+          { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/protect-self.sh" }
+        ] }
+    ],
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/hooks-handlers/test-gate.sh" } ] }
+    ]
+  }
+}

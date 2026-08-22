@@ -1,0 +1,23 @@
+# Tuỳ chọn: chạy worker trong container riêng (lớp bảo vệ 1). Receiver/demo-app chạy ngoài.
+# Container chỉ thấy: repo (rw để tạo branch), log (RO), và đúng 3 biến môi trường.
+services:
+  worker:
+    image: node:24-bookworm
+    working_dir: /work/oncall-agent
+    command: ["bash", "-lc", "curl -fsSL https://claude.ai/install.sh | bash && export PATH=$HOME/.local/bin:$PATH && node worker/index.js /incident.json"]
+    volumes:
+      - ..:/work/oncall-agent
+      - ${REPO_DIR}:/work/repo
+      - ${LOG_DIR}:/var/log/demo-app:ro
+      - ${INCIDENT_FILE}:/incident.json:ro
+    environment:
+      - CLAUDE_CODE_OAUTH_TOKEN
+      - GH_TOKEN
+      - TELEGRAM_BOT_TOKEN
+      - TELEGRAM_CHAT_ID
+      - REPO_DIR=/work/repo
+      - LOG_DIR=/var/log/demo-app
+      - MAX_BUDGET_USD
+      - MAX_TURNS
+    network_mode: bridge
+    read_only: false

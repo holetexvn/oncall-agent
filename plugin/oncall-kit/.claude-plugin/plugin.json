@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "oncall-kit",
+  "version": "1.0.0",
+  "description": "Bộ đồ nghề trực sự cố cho Claude Code: 2 skill (điều tra incident, viết postmortem), 4 hook chặn hành vi nguy hiểm, 3 subagent chuyên trách, và 1 MCP server đọc kho incident. Cài một lệnh, cả team dùng chung một chuẩn.",
+  "author": {
+    "name": "HoleTex",
+    "email": "holetexvn@gmail.com"
+  },
+  "skills": [
+    "./skills/incident-triage",
+    "./skills/postmortem"
+  ],
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": "./.mcp.json"
+}

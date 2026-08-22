@@ -1,0 +1,13 @@
+[Unit]
+Description=On-call agent receiver (Sentry webhook -> Claude Code)
+After=network.target
+[Service]
+WorkingDirectory=/srv/oncall-agent
+EnvironmentFile=/srv/oncall-agent/.env
+Environment=PATH=/home/holetex/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/home/holetex
+ExecStart=/usr/bin/node receiver/index.js
+Restart=always
+User=holetex
+[Install]
+WantedBy=multi-user.target

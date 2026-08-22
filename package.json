@@ -1,0 +1,21 @@
+{
+  "name": "oncall-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Claude Code chạy theo sự kiện trên VPS: Sentry -> điều tra -> PR fix -> báo cáo Telegram",
+  "scripts": {
+    "receiver": "node receiver/index.js",
+    "worker": "node worker/index.js",
+    "demo": "node demo-app/index.js",
+    "test:e2e": "DRY_RUN=1 node scripts/e2e-dry-run.js",
+    "test": "node --test demo-app/*.test.js"
+  },
+  "dependencies": {
+    "@sentry/node": "^10.0.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
+  }
+}

@@ -1,0 +1,10 @@
+node_modules
+.env
+receiver/state/
+worker/runs/
+demo-app/logs/
+
+# tài liệu nội bộ, không public
+KICH-BAN-QUAY.md
+HUONG-DAN-VPS.md
+deploy/TUNG-TODO.md

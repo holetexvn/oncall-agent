@@ -1,0 +1,14 @@
+[Unit]
+Description=Demo app (Express + Sentry) with a planted bug
+After=network.target
+[Service]
+WorkingDirectory=/srv/oncall-agent
+EnvironmentFile=/srv/oncall-agent/.env
+Environment=PATH=/home/holetex/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/home/holetex
+Environment=PORT=3000
+ExecStart=/usr/bin/node demo-app/index.js
+Restart=always
+User=holetex
+[Install]
+WantedBy=multi-user.target

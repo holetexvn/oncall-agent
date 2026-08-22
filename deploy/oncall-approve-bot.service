@@ -1,0 +1,13 @@
+[Unit]
+Description=On-call approve bot (Telegram ✅ Merge / ❌ Close → gh)
+After=network.target
+[Service]
+WorkingDirectory=/srv/oncall-agent
+EnvironmentFile=/srv/oncall-agent/.env
+Environment=PATH=/home/holetex/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/home/holetex
+ExecStart=/usr/bin/node reporter/approve-bot.js
+Restart=always
+User=holetex
+[Install]
+WantedBy=multi-user.target
