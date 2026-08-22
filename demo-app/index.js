@@ -22,7 +22,10 @@ app.post("/orders", (req, res) => {
   const userId = req.get("x-user-id") || customer?.id || "anon";
   Sentry.setUser?.({ id: userId });                       // để Sentry đếm được "bao nhiêu khách bị"
   log(`POST /orders user=${userId} customer=${JSON.stringify(customer)} items=${JSON.stringify(items)}`);
-  // BUG cài sẵn: không kiểm tra items có phải mảng không
+  // incident local-c7c1d029ac: thiếu `items` -> reduce trên undefined -> 500. Lỗi của client, trả 400.
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: "items phải là mảng không rỗng" });
+  }
   const total = items.reduce((s, it) => s + it.price * it.qty, 0);
   res.json({ ok: true, customer, total });
 });
